@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- mobile friendly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jargon Generator</title>
   <style>
     :root {
@@ -304,4 +304,227 @@
       <div class="word-row">
         <label for="w3b">Word 2:</label>
         <input id="w3b" type="text" list="list3b" placeholder="Choose or type">
-        <datalist 
+        <datalist id="list3b">
+          <option value="journeys"></option>
+          <option value="experiences"></option>
+          <option value="workflows"></option>
+          <option value="sprints"></option>
+          <option value="initiatives"></option>
+          <option value="campaigns"></option>
+          <option value="touchpoints"></option>
+          <option value="interfaces"></option>
+          <option value="channels"></option>
+          <option value="assets"></option>
+        </datalist>
+      </div>
+      <div class="word-row">
+        <label for="w3c">Word 3:</label>
+        <input id="w3c" type="text" list="list3c" placeholder="Choose or type">
+        <datalist id="list3c">
+          <option value="portfolio"></option>
+          <option value="stack"></option>
+          <option value="suite"></option>
+          <option value="platform"></option>
+          <option value="ecosystem"></option>
+          <option value="offering"></option>
+          <option value="blueprint"></option>
+          <option value="architecture"></option>
+          <option value="playbook"></option>
+          <option value="grid"></option>
+        </datalist>
+      </div>
+    </fieldset>
+
+    <!-- Continuation phrases -->
+    <fieldset>
+      <legend>Continuation set 1</legend>
+      <label for="contA">Choose phrase:</label>
+      <select id="contA">
+        <option value="together with">together with</option>
+        <option value="and">and</option>
+      </select>
+    </fieldset>
+
+    <fieldset>
+      <legend>Continuation set 2</legend>
+      <label for="contB">Choose phrase:</label>
+      <select id="contB">
+        <option value="leads to">leads to</option>
+        <option value="results in">results in</option>
+      </select>
+    </fieldset>
+
+    <div class="buttons">
+      <button id="generateBtn">Generate sentence</button>
+      <button id="shuffleBtn">Refresh (random order)</button>
+      <button id="freestyleBtn">Freestyle same format</button>
+    </div>
+
+    <div id="output"></div>
+    <div id="outputFreestyle"></div>
+  </div>
+
+  <script>
+    function capitalizeWords(str) {
+      return str
+        .split(' ')
+        .filter(function(word) { return word.length > 0; })
+        .map(function(word) {
+          return word.charAt(0).toUpperCase() + word.slice(1);
+        })
+        .join(' ');
+    }
+
+    function addPeriodToEachWord(str) {
+      return str
+        .split(' ')
+        .filter(function(word) { return word.length > 0; })
+        .map(function(word) {
+          return word.endsWith('.') ? word : word + '.';
+        })
+        .join(' ');
+    }
+
+    function shuffleArray(array) {
+      var arr = array.slice();
+      var currentIndex = arr.length, randomIndex;
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        var temp = arr[currentIndex];
+        arr[currentIndex] = arr[randomIndex];
+        arr[randomIndex] = temp;
+      }
+      return arr;
+    }
+
+    function readSets() {
+      var set1 = [
+        document.getElementById("w1a").value.trim(),
+        document.getElementById("w1b").value.trim(),
+        document.getElementById("w1c").value.trim()
+      ];
+      var set2 = [
+        document.getElementById("w2a").value.trim(),
+        document.getElementById("w2b").value.trim(),
+        document.getElementById("w2c").value.trim()
+      ];
+      var set3 = [
+        document.getElementById("w3a").value.trim(),
+        document.getElementById("w3b").value.trim(),
+        document.getElementById("w3c").value.trim()
+      ];
+      return { set1: set1, set2: set2, set3: set3 };
+    }
+
+    function allFilled(set1, set2, set3) {
+      return set1.concat(set2).concat(set3).every(function (w) { return w.length > 0; });
+    }
+
+    function buildBaseSentence() {
+      var sets = readSets();
+      var set1 = sets.set1;
+      var set2 = sets.set2;
+      var set3 = sets.set3;
+
+      if (!allFilled(set1, set2, set3)) {
+        return "Please fill in all nine words before generating jargon.";
+      }
+
+      var contA = document.getElementById("contA").value;
+      var contB = document.getElementById("contB").value;
+
+      // Transform first word of first set
+      set1[0] = capitalizeWords(set1[0]);
+
+      // Transform third word of third set
+      set3[2] = addPeriodToEachWord(set3[2]);
+
+      var sentence =
+        set1.join(" ") + " " +
+        contA + " " +
+        set2.join(" ") + " " +
+        contB + " " +
+        set3.join(" ");
+
+      return sentence;
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", function () {
+      var sentence = buildBaseSentence();
+      document.getElementById("output").textContent = sentence;
+      document.getElementById("outputFreestyle").textContent = "";
+    });
+
+    document.getElementById("shuffleBtn").addEventListener("click", function () {
+      var sets = readSets();
+      var set1 = sets.set1;
+      var set2 = sets.set2;
+      var set3 = sets.set3;
+
+      if (!allFilled(set1, set2, set3)) {
+        document.getElementById("output").textContent =
+          "Please fill in all nine words before shuffling.";
+        document.getElementById("outputFreestyle").textContent = "";
+        return;
+      }
+
+      var contA = document.getElementById("contA").value;
+      var contB = document.getElementById("contB").value;
+
+      set1[0] = capitalizeWords(set1[0]);
+      set3[2] = addPeriodToEachWord(set3[2]);
+
+      var shuffled1 = shuffleArray(set1);
+      var shuffled2 = shuffleArray(set2);
+      var shuffled3 = shuffleArray(set3);
+
+      var sentence =
+        shuffled1.join(" ") + " " +
+        contA + " " +
+        shuffled2.join(" ") + " " +
+        contB + " " +
+        shuffled3.join(" ");
+
+      document.getElementById("output").textContent = sentence;
+      document.getElementById("outputFreestyle").textContent = "";
+    });
+
+    document.getElementById("freestyleBtn").addEventListener("click", function () {
+      var sets = readSets();
+      var set1 = sets.set1;
+      var set2 = sets.set2;
+      var set3 = sets.set3;
+
+      if (!allFilled(set1, set2, set3)) {
+        document.getElementById("outputFreestyle").textContent =
+          "Please fill in all nine words before freestyling.";
+        return;
+      }
+
+      var contA = document.getElementById("contA").value;
+      var contB = document.getElementById("contB").value;
+
+      var words = set1.concat(set2).concat(set3);
+
+      words[0] = capitalizeWords(words[0]);
+      words[8] = addPeriodToEachWord(words[8]);
+
+      var shuffledWords = shuffleArray(words);
+
+      var firstPart = shuffledWords.slice(0, 3).join(" ");
+      var secondPart = shuffledWords.slice(3, 6).join(" ");
+      var thirdPart = shuffledWords.slice(6, 9).join(" ");
+
+      var sentence =
+        firstPart + " " +
+        contA + " " +
+        secondPart + " " +
+        contB + " " +
+        thirdPart;
+
+      document.getElementById("outputFreestyle").textContent = sentence;
+    });
+  </script>
+</body>
+</html>
