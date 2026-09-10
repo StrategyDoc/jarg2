@@ -3,35 +3,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jargon Generator</title>
   <style>
-    :root {
-      --bg1: #ff9a9e;
-      --bg2: #fad0c4;
-      --bg3: #fbc2eb;
-      --bg4: #a1c4fd;
-      --accent: #ffeb3b;
-      --accent2: #ff5722;
-    }
-
     body {
       font-family: 'Trebuchet MS', Arial, sans-serif;
-      margin: 0;
-      padding: 10px;
-      background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 40%, var(--bg3) 70%, var(--bg4) 100%);
-      color: #222;
-      box-sizing: border-box;
-    }
-
-    .container {
       max-width: 900px;
       margin: 0 auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 40%, #fbc2eb 70%, #a1c4fd 100%);
+      color: #222;
     }
 
+    /* Zany but not wobbling title */
     h1 {
       text-align: center;
-      font-size: clamp(2.2rem, 6vw, 3rem);
+      font-size: 3rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: #fff;
@@ -45,14 +31,13 @@
       padding: 8px 12px;
       border-radius: 999px;
       font-weight: bold;
-      margin: 0 0 15px 0;
-      font-size: clamp(0.9rem, 3vw, 1rem);
+      margin-bottom: 20px;
     }
 
     fieldset {
       border: 3px dashed rgba(255,255,255,0.7);
-      margin-bottom: 12px;
-      padding: 8px 10px;
+      margin-bottom: 15px;
+      padding: 10px 15px;
       background: rgba(0,0,0,0.15);
       border-radius: 15px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -62,36 +47,34 @@
       font-weight: bold;
       color: #fff;
       text-shadow: 0 0 5px #000;
-      font-size: 0.95rem;
     }
 
     .word-row {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       margin-bottom: 8px;
       flex-wrap: wrap;
       align-items: center;
     }
 
     .word-row label {
-      flex: 1 0 80px;
+      flex: 0 0 70px;
       color: #fff;
       text-shadow: 0 0 3px #000;
-      font-size: 0.85rem;
     }
 
     .word-row input[type="text"] {
-      flex: 3 1 180px;
-      padding: 6px 8px;
+      flex: 1 1 200px;
+      padding: 5px 8px;
       border-radius: 8px;
       border: 2px solid #fff;
-      background: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.8);
       outline: none;
-      font-size: 0.95rem;
-      transition: box-shadow 0.15s;
+      transition: transform 0.15s, box-shadow 0.15s;
     }
 
     .word-row input[type="text"]:focus {
+      transform: translateY(-2px);
       box-shadow: 0 0 10px rgba(255,255,255,0.8);
     }
 
@@ -101,305 +84,239 @@
       padding: 6px 8px;
       border-radius: 8px;
       border: 2px solid #fff;
-      background: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.8);
       outline: none;
-      font-size: 0.95rem;
     }
 
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 15px;
-    }
-
-    .buttons button {
-      flex: 1 1 150px;
-      padding: 10px 15px;
-      font-size: 0.95rem;
+    #generateBtn {
+      display: block;
+      margin: 25px auto;
+      padding: 12px 30px;
+      font-size: 18px;
       cursor: pointer;
       border-radius: 999px;
       border: none;
-      background: radial-gradient(circle at top left, var(--accent), var(--accent2));
+      background: radial-gradient(circle at top left, #ffeb3b, #ff5722);
       color: #000;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       box-shadow: 0 6px 12px rgba(0,0,0,0.3);
       transition: transform 0.1s, box-shadow 0.1s;
     }
 
-    .buttons button:hover {
-      transform: translateY(-2px);
+    #generateBtn:hover {
+      transform: translateY(-3px) rotate(-1deg);
       box-shadow: 0 10px 18px rgba(0,0,0,0.4);
     }
 
-    .buttons button:active {
+    #generateBtn:active {
       transform: translateY(0) scale(0.97);
       box-shadow: 0 4px 8px rgba(0,0,0,0.5);
     }
 
-    #output,
-    #outputFreestyle {
-      margin-top: 15px;
-      padding: 12px;
+    #output {
+      margin-top: 20px;
+      padding: 15px;
       background: rgba(0,0,0,0.6);
       border-radius: 15px;
       border: 2px solid #fff;
       min-height: 40px;
-      color: var(--accent);
-      font-size: 1.05rem;
+      color: #ffeb3b;
+      font-size: 1.2rem;
       text-align: center;
       box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-      word-wrap: break-word;
-    }
-
-    @media (max-width: 480px) {
-      fieldset {
-        padding: 6px 8px;
-      }
-      .word-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .word-row label {
-        flex: 1 0 auto;
-      }
-      .word-row input[type="text"] {
-        flex: 1 0 auto;
-        width: 100%;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Jargon Generator</h1>
-    <p class="intro">Pick buzzwords or type your own. Then remix them into glorious nonsense.</p>
+  <h1>Jargon Generator</h1>
+  <p class="intro">Pick from the buzzword lists or type your own, then marvel at the nonsense.</p>
 
-    <!-- Set 1 -->
-    <fieldset>
-      <legend>Word set 1</legend>
-      <div class="word-row">
-        <label for="w1a">Word 1:</label>
-        <input id="w1a" type="text" list="list1a" placeholder="Choose or type">
-        <datalist id="list1a">
-          <option value="leverage"></option>
-          <option value="synergize"></option>
-          <option value="streamline"></option>
-          <option value="pivot"></option>
-          <option value="benchmark"></option>
-          <option value="monetize"></option>
-          <option value="iterate"></option>
-          <option value="scale"></option>
-          <option value="optimize"></option>
-          <option value="facilitate"></option>
-        </datalist>
-      </div>
-      <div class="word-row">
-        <label for="w1b">Word 2:</label>
-        <input id="w1b" type="text" list="list1b" placeholder="Choose or type">
-        <datalist id="list1b">
-          <option value="holistic"></option>
-          <option value="disruptive"></option>
-          <option value="synergistic"></option>
-          <option value="strategic"></option>
-          <option value="proactive"></option>
-          <option value="innovative"></option>
-          <option value="dynamic"></option>
-          <option value="scalable"></option>
-          <option value="customer-centric"></option>
-          <option value="data-driven"></option>
-        </datalist>
-      </div>
-      <div class="word-row">
-        <label for="w1c">Word 3:</label>
-        <input id="w1c" type="text" list="list1c" placeholder="Choose or type">
-        <datalist id="list1c">
-          <option value="ecosystems"></option>
-          <option value="paradigms"></option>
-          <option value="frameworks"></option>
-          <option value="touchpoints"></option>
-          <option value="deliverables"></option>
-          <option value="roadmaps"></option>
-          <option value="pipelines"></option>
-          <option value="solutions"></option>
-          <option value="KPIs"></option>
-          <option value="value-chains"></option>
-        </datalist>
-      </div>
-    </fieldset>
-
-    <!-- Set 2 -->
-    <fieldset>
-      <legend>Word set 2</legend>
-      <div class="word-row">
-        <label for="w2a">Word 1:</label>
-        <input id="w2a" type="text" list="list2a" placeholder="Choose or type">
-        <datalist id="list2a">
-          <option value="agile"></option>
-          <option value="lean"></option>
-          <option value="modular"></option>
-          <option value="cloud-native"></option>
-          <option value="plug-and-play"></option>
-          <option value="robust"></option>
-          <option value="end-to-end"></option>
-          <option value="full-stack"></option>
-          <option value="mission-critical"></option>
-          <option value="future-proof"></option>
-        </datalist>
-      </div>
-      <div class="word-row">
-        <label for="w2b">Word 2:</label>
-        <input id="w2b" type="text" list="list2b" placeholder="Choose or type">
-        <datalist id="list2b">
-          <option value="stakeholder"></option>
-          <option value="customer"></option>
-          <option value="user"></option>
-          <option value="partner"></option>
-          <option value="investor"></option>
-          <option value="community"></option>
-          <option value="board"></option>
-          <option value="team"></option>
-          <option value="leadership"></option>
-          <option value="ecosystem"></option>
-        </datalist>
-      </div>
-      <div class="word-row">
-        <label for="w2c">Word 3:</label>
-        <input id="w2c" type="text" list="list2c" placeholder="Choose or type">
-        <datalist id="list2c">
-          <option value="engagement"></option>
-          <option value="alignment"></option>
-          <option value="adoption"></option>
-          <option value="retention"></option>
-          <option value="collaboration"></option>
-          <option value="enablement"></option>
-          <option value="ownership"></option>
-          <option value="governance"></option>
-          <option value="advocacy"></option>
-          <option value="activation"></option>
-        </datalist>
-      </div>
-    </fieldset>
-
-    <!-- Set 3 -->
-    <fieldset>
-      <legend>Word set 3</legend>
-      <div class="word-row">
-        <label for="w3a">Word 1:</label>
-        <input id="w3a" type="text" list="list3a" placeholder="Choose or type">
-        <datalist id="list3a">
-          <option value="frictionless"></option>
-          <option value="omnichannel"></option>
-          <option value="personalized"></option>
-          <option value="immersive"></option>
-          <option value="gamified"></option>
-          <option value="hyperlocal"></option>
-          <option value="always-on"></option>
-          <option value="real-time"></option>
-          <option value="sustainable"></option>
-          <option value="inclusive"></option>
-        </datalist>
-      </div>
-      <div class="word-row">
-        <label for="w3b">Word 2:</label>
-        <input id="w3b" type="text" list="list3b" placeholder="Choose or type">
-        <datalist id="list3b">
-          <option value="journeys"></option>
-          <option value="experiences"></option>
-          <option value="workflows"></option>
-          <option value="sprints"></option>
-          <option value="initiatives"></option>
-          <option value="campaigns"></option>
-          <option value="touchpoints"></option>
-          <option value="interfaces"></option>
-          <option value="channels"></option>
-          <option value="assets"></option>
-        </datalist>
-      </div>
-      <div class="word-row">
-        <label for="w3c">Word 3:</label>
-        <input id="w3c" type="text" list="list3c" placeholder="Choose or type">
-        <datalist id="list3c">
-          <option value="portfolio"></option>
-          <option value="stack"></option>
-          <option value="suite"></option>
-          <option value="platform"></option>
-          <option value="ecosystem"></option>
-          <option value="offering"></option>
-          <option value="blueprint"></option>
-          <option value="architecture"></option>
-          <option value="playbook"></option>
-          <option value="grid"></option>
-        </datalist>
-      </div>
-    </fieldset>
-
-    <!-- Continuation phrases -->
-    <fieldset>
-      <legend>Continuation set 1</legend>
-      <label for="contA">Choose phrase:</label>
-      <select id="contA">
-        <option value="together with">together with</option>
-        <option value="and">and</option>
-      </select>
-    </fieldset>
-
-    <fieldset>
-      <legend>Continuation set 2</legend>
-      <label for="contB">Choose phrase:</label>
-      <select id="contB">
-        <option value="leads to">leads to</option>
-        <option value="results in">results in</option>
-      </select>
-    </fieldset>
-
-    <div class="buttons">
-      <button id="generateBtn">Generate sentence</button>
-      <button id="shuffleBtn">Refresh (random order)</button>
-      <button id="freestyleBtn">Freestyle same format</button>
+  <!-- Set 1 -->
+  <fieldset>
+    <legend>Word set 1</legend>
+    <div class="word-row">
+      <label for="w1a">Word 1:</label>
+      <input id="w1a" type="text" list="list1a" placeholder="Choose or type">
+      <datalist id="list1a">
+        <option value="holistic"></option>
+        <option value="disruptive"></option>
+        <option value="random"></option>
+        <option value="strategic"></option>
+        <option value="proactive"></option>
+        <option value="innovative"></option>
+        <option value="dynamic"></option>
+        <option value="scalable"></option>
+        <option value="customer-centric"></option>
+        <option value="data-driven"></option>
+      </datalist>
     </div>
+    <div class="word-row">
+      <label for="w1b">Word 2:</label>
+      <input id="w1b" type="text" list="list1b" placeholder="Choose or type">
+      <datalist id="list1b">
+        <option value="leveraged"></option>
+        <option value="synergistic"></option>
+        <option value="streamlined"></option>
+        <option value="data-driven"></option>
+        <option value="illustrative"></option>
+        <option value="monetized"></option>
+        <option value="iterated"></option>
+        <option value="scapular"></option>
+        <option value="optimized"></option>
+        <option value="facilitative"></option>  
+      </datalist>
+    </div>
+    <div class="word-row">
+      <label for="w1c">Word 3:</label>
+      <input id="w1c" type="text" list="list1c" placeholder="Choose or type">
+      <datalist id="list1c">
+        <option value="ecosystems"></option>
+        <option value="paradigms"></option>
+        <option value="frameworks"></option>
+        <option value="touchpoints"></option>
+        <option value="deliverables"></option>
+        <option value="roadmaps"></option>
+        <option value="pipelines"></option>
+        <option value="solutions"></option>
+        <option value="pivots"></option>
+        <option value="benchmarks"></option>
+      </datalist>
+    </div>
+  </fieldset>
 
-    <div id="output"></div>
-    <div id="outputFreestyle"></div>
-  </div>
+  <!-- Set 2 -->
+  <fieldset>
+    <legend>Word set 2</legend>
+    <div class="word-row">
+      <label for="w2a">Word 1:</label>
+      <input id="w2a" type="text" list="list2a" placeholder="Choose or type">
+      <datalist id="list2a">
+        <option value="agile"></option>
+        <option value="lean"></option>
+        <option value="modular"></option>
+        <option value="cloud-native"></option>
+        <option value="plug-and-play"></option>
+        <option value="robust"></option>
+        <option value="end-to-end"></option>
+        <option value="full-stack"></option>
+        <option value="mission-critical"></option>
+        <option value="future-proof"></option>
+      </datalist>
+    </div>
+    <div class="word-row">
+      <label for="w2b">Word 2:</label>
+      <input id="w2b" type="text" list="list2b" placeholder="Choose or type">
+      <datalist id="list2b">
+        <option value="stakeholder"></option>
+        <option value="customer"></option>
+        <option value="user"></option>
+        <option value="partner"></option>
+        <option value="investor"></option>
+        <option value="community"></option>
+        <option value="board"></option>
+        <option value="team"></option>
+        <option value="leadership"></option>
+        <option value="ecosystem"></option>
+      </datalist>
+    </div>
+    <div class="word-row">
+      <label for="w2c">Word 3:</label>
+      <input id="w2c" type="text" list="list2c" placeholder="Choose or type">
+      <datalist id="list2c">
+        <option value="engagement"></option>
+        <option value="alignment"></option>
+        <option value="adoption"></option>
+        <option value="retention"></option>
+        <option value="collaboration"></option>
+        <option value="enablement"></option>
+        <option value="ownership"></option>
+        <option value="governance"></option>
+        <option value="advocacy"></option>
+        <option value="activation"></option>
+      </datalist>
+    </div>
+  </fieldset>
+
+  <!-- Set 3 -->
+  <fieldset>
+    <legend>Word set 3</legend>
+    <div class="word-row">
+      <label for="w3a">Word 1:</label>
+      <input id="w3a" type="text" list="list3a" placeholder="Choose or type">
+      <datalist id="list3a">
+        <option value="frictionless"></option>
+        <option value="omnichannel"></option>
+        <option value="personalized"></option>
+        <option value="immersive"></option>
+        <option value="gamified"></option>
+        <option value="hyperlocal"></option>
+        <option value="always-on"></option>
+        <option value="real-time"></option>
+        <option value="sustainable"></option>
+        <option value="inclusive"></option>
+      </datalist>
+    </div>
+    <div class="word-row">
+      <label for="w3b">Word 2:</label>
+      <input id="w3b" type="text" list="list3b" placeholder="Choose or type">
+      <datalist id="list3b">
+        <option value="paternalistic"></option>
+        <option value="experiential"></option>
+        <option value="workflow"></option>
+        <option value="sprint"></option>
+        <option value="initiatives"></option>
+        <option value="campaign"></option>
+        <option value="touchpoints"></option>
+        <option value="interface"></option>
+        <option value="overpowering"></option>
+        <option value="asset"></option>
+      </datalist>
+    </div>
+    <div class="word-row">
+      <label for="w3c">Word 3:</label>
+      <input id="w3c" type="text" list="list3c" placeholder="Choose or type">
+      <datalist id="list3c">
+        <option value="portfolio"></option>
+        <option value="sub-stack"></option>
+        <option value="logic"></option>
+        <option value="platform"></option>
+        <option value="ecosystem"></option>
+        <option value="offering"></option>
+        <option value="blueprint"></option>
+        <option value="architecture"></option>
+        <option value="playbook"></option>
+        <option value="channel"></option>
+      </datalist>
+    </div>
+  </fieldset>
+
+  <!-- Continuation phrases set 1 -->
+  <fieldset>
+    <legend>Continuation set 1</legend>
+    <label for="contA">Choose phrase:</label>
+    <select id="contA">
+      <option value="together with">together with</option>
+      <option value="and">and</option>
+    </select>
+  </fieldset>
+
+  <!-- Continuation phrases set 2 -->
+  <fieldset>
+    <legend>Continuation set 2</legend>
+    <label for="contB">Choose phrase:</label>
+    <select id="contB">
+      <option value="leads to a">leads to</option>
+      <option value="results in a">results in</option>
+    </select>
+  </fieldset>
+
+  <button id="generateBtn">Generate Jargon</button>
+
+  <div id="output"></div>
 
   <script>
-    function capitalizeWords(str) {
-      return str
-        .split(' ')
-        .filter(function(word) { return word.length > 0; })
-        .map(function(word) {
-          return word.charAt(0).toUpperCase() + word.slice(1);
-        })
-        .join(' ');
-    }
-
-    function addPeriodToEachWord(str) {
-      return str
-        .split(' ')
-        .filter(function(word) { return word.length > 0; })
-        .map(function(word) {
-          return word.endsWith('.') ? word : word + '.';
-        })
-        .join(' ');
-    }
-
-    function shuffleArray(array) {
-      var arr = array.slice();
-      var currentIndex = arr.length, randomIndex;
-      while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        var temp = arr[currentIndex];
-        arr[currentIndex] = arr[randomIndex];
-        arr[randomIndex] = temp;
-      }
-      return arr;
-    }
-
-    function readSets() {
+    document.getElementById("generateBtn").addEventListener("click", function () {
       var set1 = [
         document.getElementById("w1a").value.trim(),
         document.getElementById("w1b").value.trim(),
@@ -415,32 +332,19 @@
         document.getElementById("w3b").value.trim(),
         document.getElementById("w3c").value.trim()
       ];
-      return { set1: set1, set2: set2, set3: set3 };
-    }
-
-    function allFilled(set1, set2, set3) {
-      return set1.concat(set2).concat(set3).every(function (w) { return w.length > 0; });
-    }
-
-    function buildBaseSentence() {
-      var sets = readSets();
-      var set1 = sets.set1;
-      var set2 = sets.set2;
-      var set3 = sets.set3;
-
-      if (!allFilled(set1, set2, set3)) {
-        return "Please fill in all nine words before generating jargon.";
-      }
 
       var contA = document.getElementById("contA").value;
       var contB = document.getElementById("contB").value;
 
-      // Transform first word of first set
-      set1[0] = capitalizeWords(set1[0]);
+      var allFilled = set1.concat(set2).concat(set3).every(function (w) { return w.length > 0; });
 
-      // Transform third word of third set
-      set3[2] = addPeriodToEachWord(set3[2]);
+      if (!allFilled) {
+        document.getElementById("output").textContent =
+          "Please fill in all nine words before generating jargon.";
+        return;
+      }
 
+      // Pattern: set1 + contA + set2 + contB + set3
       var sentence =
         set1.join(" ") + " " +
         contA + " " +
@@ -448,83 +352,7 @@
         contB + " " +
         set3.join(" ");
 
-      return sentence;
-    }
-
-    document.getElementById("generateBtn").addEventListener("click", function () {
-      var sentence = buildBaseSentence();
       document.getElementById("output").textContent = sentence;
-      document.getElementById("outputFreestyle").textContent = "";
-    });
-
-    document.getElementById("shuffleBtn").addEventListener("click", function () {
-      var sets = readSets();
-      var set1 = sets.set1;
-      var set2 = sets.set2;
-      var set3 = sets.set3;
-
-      if (!allFilled(set1, set2, set3)) {
-        document.getElementById("output").textContent =
-          "Please fill in all nine words before shuffling.";
-        document.getElementById("outputFreestyle").textContent = "";
-        return;
-      }
-
-      var contA = document.getElementById("contA").value;
-      var contB = document.getElementById("contB").value;
-
-      set1[0] = capitalizeWords(set1[0]);
-      set3[2] = addPeriodToEachWord(set3[2]);
-
-      var shuffled1 = shuffleArray(set1);
-      var shuffled2 = shuffleArray(set2);
-      var shuffled3 = shuffleArray(set3);
-
-      var sentence =
-        shuffled1.join(" ") + " " +
-        contA + " " +
-        shuffled2.join(" ") + " " +
-        contB + " " +
-        shuffled3.join(" ");
-
-      document.getElementById("output").textContent = sentence;
-      document.getElementById("outputFreestyle").textContent = "";
-    });
-
-    document.getElementById("freestyleBtn").addEventListener("click", function () {
-      var sets = readSets();
-      var set1 = sets.set1;
-      var set2 = sets.set2;
-      var set3 = sets.set3;
-
-      if (!allFilled(set1, set2, set3)) {
-        document.getElementById("outputFreestyle").textContent =
-          "Please fill in all nine words before freestyling.";
-        return;
-      }
-
-      var contA = document.getElementById("contA").value;
-      var contB = document.getElementById("contB").value;
-
-      var words = set1.concat(set2).concat(set3);
-
-      words[0] = capitalizeWords(words[0]);
-      words[8] = addPeriodToEachWord(words[8]);
-
-      var shuffledWords = shuffleArray(words);
-
-      var firstPart = shuffledWords.slice(0, 3).join(" ");
-      var secondPart = shuffledWords.slice(3, 6).join(" ");
-      var thirdPart = shuffledWords.slice(6, 9).join(" ");
-
-      var sentence =
-        firstPart + " " +
-        contA + " " +
-        secondPart + " " +
-        contB + " " +
-        thirdPart;
-
-      document.getElementById("outputFreestyle").textContent = sentence;
     });
   </script>
 </body>
